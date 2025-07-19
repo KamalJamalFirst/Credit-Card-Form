@@ -1,25 +1,71 @@
 /* eslint-disable prettier/prettier */
 import Button from '@mui/joy/Button';
-import ButtonGroup from '@mui/joy/ButtonGroup';
+import ToggleButtonGroup from '@mui/joy/ToggleButtonGroup';
 import Stack from '@mui/joy/Stack';
+import { Controller, type Control, type UseFormReset } from 'react-hook-form';
+import type { FormInputs } from '../types/inputs';
 
-export default function SelectCard({ cardChoice, setCardChoice }: { cardChoice: boolean, setCardChoice: React.Dispatch<React.SetStateAction<boolean>> }) {
+export default function SelectCard({ control, reset, fieldsNames }: { 
+  control:  Control<FormInputs>, 
+  reset: UseFormReset<FormInputs>,
+  //unregister: UseFormUnregister<FormInputs>,
+  fieldsNames: FormInputs
+}) {
   return (
-    <Stack spacing={1}>
-      <ButtonGroup aria-label="outlined button group">
-        <Button
-          color={cardChoice ? 'neutral' : 'primary'}
-          onClick={() => setCardChoice(false)}
-        >
-          Visa/Mastercard
-        </Button>
-        <Button 
-            color={cardChoice ? 'primary' : 'neutral'} 
-            onClick={() => setCardChoice(true)}
-        >
-            Amex
-        </Button>
-      </ButtonGroup>
-    </Stack>
+      
+      <Controller
+        name='visaMaster'
+        control={control}
+        render={({ field: { onChange, value } }) => {
+          console.log(value)
+
+          return (
+            <ToggleButtonGroup >
+              <Stack spacing={1} direction="row">
+                <Button 
+                  variant="outlined" 
+                  onClick={() => {
+                    reset({
+                      ...fieldsNames,
+                      visaMaster: !value
+                    })
+                  }} 
+                  color='neutral'
+                  aria-pressed={value ? 'false' : 'true'}
+                  sx={(theme) => ({
+                    [`&[aria-pressed="true"]`]: {
+                      ...theme.variants.outlinedActive.neutral,
+                      borderColor: theme.vars.palette.neutral.outlinedHoverBorder
+                    }
+                  })}
+                >
+                  Visa/Mastercard
+                </Button>
+                <Button 
+                  variant="outlined" 
+                  onClick={() => {
+                    reset({
+                      ...fieldsNames,
+                      visaMaster: !value
+                    })
+                    onChange(true)
+                  }} 
+                  color='neutral'
+                  aria-pressed={value ? 'true' : 'false'}
+                  sx={(theme) => ({
+                    [`&[aria-pressed="true"]`]: {
+                      ...theme.variants.outlinedActive.neutral,
+                      borderColor: theme.vars.palette.neutral.outlinedHoverBorder
+                    }
+                  })}
+                
+                >
+                  Amex
+                </Button>
+              </Stack>
+            </ToggleButtonGroup>
+          )
+        }}
+      />
   );
 }

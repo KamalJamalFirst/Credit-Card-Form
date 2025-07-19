@@ -13,23 +13,35 @@ import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import type { FormInputs } from '../types/inputs';
 import SelectCard from './buttonGroup';
-import type { FieldErrors, UseFormGetValues, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form';
+import { Controller, type Control, type FieldErrors, type UseFormGetValues, type UseFormRegister, type UseFormReset, type UseFormResetField, type UseFormSetValue, type UseFormTrigger } from 'react-hook-form';
 import ShowError from './showError';
+import type { AssertsShape } from 'yup/lib/object';
+import { paySchemaDefault } from '../schema/paySchema';
+import InputController from './controller';
+import isCardNumber from '../helpers/isCardNumber';
 
 
-export default function CreditCard({ register, getValues, errors, cardChoice, setCardChoice, placeholder }: { 
+export default function CreditCard({ register, reset, resetField, trigger, setValue, getValues, errors, control, placeholder, fieldsNames }: { 
     register: UseFormRegister<FormInputs>, 
+    reset: UseFormReset<FormInputs>,
+    resetFeild: UseFormResetField<AssertsShape>
+    trigger: UseFormTrigger<AssertsShape>,
+    //unregister: UseFormUnregister<FormInputs>,
+    setValue: UseFormSetValue<AssertsShape>,
     getValues: UseFormGetValues<FormInputs>,
     errors: FieldErrors<FormInputs>, 
-    handleSubmit:  UseFormHandleSubmit<FormInputs>,
-    cardChoice: boolean,
-    setCardChoice: React.Dispatch<React.SetStateAction<boolean>>,
-    placeholder: string
+    control:  Control<FormInputs>,
+    //handleSubmit:  UseFormHandleSubmit<FormInputs>,
+    //cardChoice: boolean,
+    //setCardChoice: React.Dispatch<React.SetStateAction<boolean>>,
+    placeholder: string,
+    fieldsNames: FormInputs
 }) 
   {
-    const [ref, name, onChange] = register
+    //const [ref, name, onChange] = register
     //console.log(props)
-  
+  console.log(placeholder)
+
 return (
     <Card
       variant="outlined"
@@ -46,7 +58,7 @@ return (
         <Typography level="title-lg" startDecorator={<InfoOutlined />}>
             Add payment method
         </Typography>
-        <SelectCard cardChoice={cardChoice} setCardChoice={setCardChoice}/>
+        <SelectCard control={control} reset={reset} fieldsNames={fieldsNames}/>
       </div>
       <Divider inset="none" />
       <CardContent
@@ -58,42 +70,56 @@ return (
       >
         <FormControl required={true} sx={{ gridColumn: '1/-1' }}>
           <FormLabel>Card number</FormLabel>
-          <Input
-            ref={ref}
-            {...register('cardNumber')}
-            placeholder={placeholder}
-            endDecorator={<CreditCardIcon />}
+          <Controller 
+            control={control}
+            name='cardNumber'
+            render={({ field: { onChange, value } }) => {
+                const prettyValue = errors['cardNumber']?.type === 'min' ? isCardNumber(value, 'cardNumber', getValues) : value;
+                
+                return (
+                  <InputController 
+                          onChange={onChange} 
+                          value={prettyValue} 
+                          name='cardNumber' 
+                          placeholder={placeholder} 
+                          errors={errors} 
+                          trigger={trigger} 
+                          setValue={setValue} 
+                          getValues={getValues}
+                    />
+                )
+            }}
           />
-          <ShowError error={errors.cardNumber?.message} />
         </FormControl>
         <FormControl required={true}>
           <FormLabel>Expiry date</FormLabel>
-          <Input
-            //ref={ref}
+          <Controller 
+            control={control}
             name='expiryDate'
-            onChange={() => console.log(getValues('expiryDate'))}
-            placeholder="MM / YY"
-            endDecorator={<CreditCardIcon />} />
-          <ShowError error={errors.expiryDate?.message} />
+            render={({ field: { onChange, value } }) => (
+              <InputController onChange={onChange} value={value} name='expiryDate' placeholder='MM / YY' errors={errors} trigger={trigger} getValues={getValues}/>
+            )}
+          />
         </FormControl>
         <FormControl required={true}>
           <FormLabel>CVC/CVV</FormLabel>
-          <Input 
-            //ref={ref}
+          <Controller 
+            control={control}
             name='cvv'
-            onChange={() => console.log(getValues('cvv'))}
-            placeholder="CVC/CVV"
-            endDecorator={<InfoOutlined />} />
-          <ShowError error={errors.cvv?.message} />
+            render={({ field: { onChange, value } }) => (
+              <InputController onChange={onChange} value={value} name='cvv' placeholder='CVC/CVV' errors={errors} trigger={trigger} getValues={getValues}/>
+            )}
+          />
         </FormControl>
         <FormControl required={true} sx={{ gridColumn: '1/-1' }}>
           <FormLabel>Card holder name</FormLabel>
-          <Input 
-            //ref={ref}
+          <Controller 
+            control={control}
             name='holderName'
-            onChange={() => console.log(getValues('holderName'))}
-            placeholder="Enter cardholder's full name" />
-          <ShowError error={errors.holderName?.message} />
+            render={({ field: { onChange, value } }) => (
+              <InputController onChange={onChange} value={value} name='holderName' placeholder="Enter cardholder's full name" errors={errors} trigger={trigger} />
+            )}
+          />
         </FormControl>
         <Checkbox label="Save card" sx={{ gridColumn: '1/-1', my: 1 }} />
         <CardActions sx={{ gridColumn: '1/-1' }}>

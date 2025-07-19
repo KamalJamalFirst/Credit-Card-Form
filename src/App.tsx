@@ -1,19 +1,14 @@
-import { useState } from 'react';
 import CreditCard from './shared/components/credit-card-form';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import type { FormInputs } from './shared/types/inputs';
-import { paySchemaAmex, paySchemaDefault } from './shared/schema/paySchema';
+import { paySchemaDefault } from './shared/schema/paySchema';
 
 export const App = () => {
-  const [visaMaster, setAmex] = useState(false);
   const [placeholderDefault, placeholderAmex] = [
     '4242 4242 4242 4242',
     '55555 55555 55555'
   ];
-  const resolver: any = visaMaster
-    ? yupResolver(paySchemaAmex)
-    : yupResolver(paySchemaDefault);
 
   const fieldsNames: FormInputs = {
     cardNumber: '',
@@ -25,13 +20,19 @@ export const App = () => {
 
   const {
     register,
+    //unregister,
+    reset,
+    resetField,
+    trigger,
+    control,
+    setValue,
     getValues,
     handleSubmit,
     formState: { errors }
   } = useForm<FormInputs>({
     mode: 'onChange',
     defaultValues: fieldsNames,
-    resolver: resolver
+    resolver: yupResolver(paySchemaDefault)
   });
 
   const onSubmit: SubmitHandler<FormInputs> = data => console.log(data);
@@ -45,12 +46,19 @@ export const App = () => {
     >
       <CreditCard
         register={register}
+        reset={reset}
+        resetField={resetField}
+        trigger={trigger}
+        //unregister={unregister}
+        control={control}
+        setValue={setValue}
         getValues={getValues}
         errors={errors}
-        handleSubmit={handleSubmit}
-        cardChoice={visaMaster}
-        setCardChoice={setAmex}
-        placeholder={visaMaster ? placeholderAmex : placeholderDefault}
+        //handleSubmit={handleSubmit}
+        placeholder={
+          getValues('visaMaster') ? placeholderAmex : placeholderDefault
+        }
+        fieldsNames={fieldsNames}
       />
     </form>
   );
