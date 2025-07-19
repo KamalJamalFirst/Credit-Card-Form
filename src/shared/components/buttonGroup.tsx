@@ -16,10 +16,7 @@ export default function SelectCard({ control, reset, fieldsNames }: {
       <Controller
         name='visaMaster'
         control={control}
-        render={({ field: { onChange, value } }) => {
-          console.log(value)
-
-          return (
+        render={({ field: { onChange, value } }) => (
             <ToggleButtonGroup >
               <Stack spacing={1} direction="row">
                 <Button 
@@ -64,8 +61,7 @@ export default function SelectCard({ control, reset, fieldsNames }: {
                 </Button>
               </Stack>
             </ToggleButtonGroup>
-          )
-        }}
+          )}
       />
   );
 }

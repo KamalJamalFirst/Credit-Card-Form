@@ -6,41 +6,30 @@ import Checkbox from '@mui/joy/Checkbox';
 import Divider from '@mui/joy/Divider';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
-import Input from '@mui/joy/Input';
 import Typography from '@mui/joy/Typography';
 import Button from '@mui/joy/Button';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
 import type { FormInputs } from '../types/inputs';
 import SelectCard from './buttonGroup';
 import { Controller, type Control, type FieldErrors, type UseFormGetValues, type UseFormRegister, type UseFormReset, type UseFormResetField, type UseFormSetValue, type UseFormTrigger } from 'react-hook-form';
-import ShowError from './showError';
 import type { AssertsShape } from 'yup/lib/object';
-import { paySchemaDefault } from '../schema/paySchema';
 import InputController from './controller';
 import isCardNumber from '../helpers/isCardNumber';
 
-
-export default function CreditCard({ register, reset, resetField, trigger, setValue, getValues, errors, control, placeholder, fieldsNames }: { 
+export default function CreditCard({ reset, trigger, control, setValue, getValues, errors, placeholder, fieldsNames, isValid }: { 
     register: UseFormRegister<FormInputs>, 
     reset: UseFormReset<FormInputs>,
     resetFeild: UseFormResetField<AssertsShape>
     trigger: UseFormTrigger<AssertsShape>,
-    //unregister: UseFormUnregister<FormInputs>,
     setValue: UseFormSetValue<AssertsShape>,
     getValues: UseFormGetValues<FormInputs>,
     errors: FieldErrors<FormInputs>, 
     control:  Control<FormInputs>,
-    //handleSubmit:  UseFormHandleSubmit<FormInputs>,
-    //cardChoice: boolean,
-    //setCardChoice: React.Dispatch<React.SetStateAction<boolean>>,
     placeholder: string,
-    fieldsNames: FormInputs
+    fieldsNames: FormInputs,
+    isValid: boolean
 }) 
   {
-    //const [ref, name, onChange] = register
-    //console.log(props)
-  console.log(placeholder)
 
 return (
     <Card
@@ -75,7 +64,6 @@ return (
             name='cardNumber'
             render={({ field: { onChange, value } }) => {
               const prettyValue = isCardNumber(value, 'cardNumber', getValues);
-              //const prettyValue = errors['cardNumber']?.type === 'min' ? isCardNumber(value, 'cardNumber', getValues) : value;
               
               return (
                 <InputController 
@@ -143,10 +131,9 @@ return (
           <Controller 
             control={control}
             name='holderName'
-            render={({ field: { onChange, value } }) => {
-                //const prettyValue = isCardNumber(value, 'cvv', getValues);
+            render={({ field: { onChange, value } }) => 
                 
-                return (
+                 (
                   <InputController 
                           onChange={onChange} 
                           value={value} 
@@ -158,12 +145,12 @@ return (
                           getValues={getValues}
                     />
                 )
-            }}
+            }
           />
         </FormControl>
         <Checkbox label="Save card" sx={{ gridColumn: '1/-1', my: 1 }} />
         <CardActions sx={{ gridColumn: '1/-1' }}>
-          <Button type='submit' disabled={true} variant="solid" color="primary">
+          <Button type='submit' disabled={isValid ? false : true} variant="solid" color="primary">
             Pay
           </Button>
         </CardActions>

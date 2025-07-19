@@ -1,7 +1,7 @@
 import CreditCard from './shared/components/credit-card-form';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import type { FormInputs } from './shared/types/inputs';
+import type { FormInputs, sendSubmit } from './shared/types/inputs';
 import { paySchemaDefault } from './shared/schema/paySchema';
 
 export const App = () => {
@@ -19,25 +19,28 @@ export const App = () => {
   };
 
   const {
-    register,
-    //unregister,
     reset,
-    resetField,
     trigger,
     control,
     setValue,
     getValues,
     handleSubmit,
-    formState: { errors }
+    formState: { errors, isValid }
   } = useForm<FormInputs>({
     mode: 'onChange',
     defaultValues: fieldsNames,
     resolver: yupResolver(paySchemaDefault)
   });
 
-  const onSubmit: SubmitHandler<FormInputs> = data => console.log(data);
-
-  console.log(errors);
+  const onSubmit: SubmitHandler<FormInputs> = data => {
+    const sendSubmit: sendSubmit = {};
+    sendSubmit['cardNumber'] = data.cardNumber.replaceAll(' ', '');
+    sendSubmit['expiryMonth'] = data.expiryDate.split('/')[0];
+    sendSubmit['expiryYear'] = '20' + data.expiryDate.split('/')[1];
+    sendSubmit['holderName'] = data.holderName;
+    sendSubmit['cvv'] = data.cvv;
+    console.log(sendSubmit);
+  };
 
   return (
     <form
@@ -45,9 +48,7 @@ export const App = () => {
       className="fixed left-1/2 top-1/2 size-1/2 -translate-x-1/2 -translate-y-1/2"
     >
       <CreditCard
-        register={register}
         reset={reset}
-        resetField={resetField}
         trigger={trigger}
         //unregister={unregister}
         control={control}
@@ -59,6 +60,7 @@ export const App = () => {
           getValues('visaMaster') ? placeholderAmex : placeholderDefault
         }
         fieldsNames={fieldsNames}
+        isValid={isValid}
       />
     </form>
   );
