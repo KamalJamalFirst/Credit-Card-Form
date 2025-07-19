@@ -88,11 +88,16 @@ export const paySchemaDefault = yup.object({
     .required('Holder name is required'),
   cvv: yup
     .string()
-    .matches(/^[0-9]$/, 'Only numbers acceptable')
     .when('visaMaster', {
       is: true,
-      then: schema => schema.min(4, 'Invalid CVV').max(4, 'Invalid CVV'),
-      otherwise: schema => schema.min(3, 'Invalid CVV').max(3, 'Invalid CVV')
+      then: schema =>
+        schema
+          .min(4, 'Invalid CVV')
+          .matches(/^[0-9]{4}$/, '4 numbers acceptable'),
+      otherwise: schema =>
+        schema
+          .min(3, 'Invalid CVV')
+          .matches(/^[0-9]{3}$/, '3 numbers acceptable')
     })
     .required('CVV is required')
 });

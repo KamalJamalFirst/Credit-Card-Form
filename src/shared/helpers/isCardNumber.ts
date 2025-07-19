@@ -7,32 +7,35 @@ function isCardNumber(
   getValues: UseFormGetValues<FormInputs>
   //setValue: UseFormSetValue<AssertsShape>
 ) {
+  const regexText = /^(?:[a-zA-Z]+\s?|[a-zA-Z]+\s[a-zA-Z]*)$/;
+  const regexNum = /^[0-9\s]+$/;
   //   console.log(name);
   //   console.log(value);
+
   if (name === 'cardNumber') {
-    const spaceOut = value.split(' ');
-    const joinedRaw = spaceOut.join('');
-    const cleanedValue = joinedRaw.replace(
-      /^(?:[a-zA-Z]+\s?|[a-zA-Z]+\s[a-zA-Z]*)$/,
-      ''
-    );
+    if (regexNum.test(value)) {
+      const spaceOut = value.split(' ');
+      const joinedRaw = spaceOut.join('');
 
-    // console.log('getting value visaMaster', getValues('visaMaster'));
+      // console.log('getting value visaMaster', getValues('visaMaster'));
 
-    if (getValues('visaMaster')) {
-      if (joinedRaw.length > 15) {
-        console.log('catching length', joinedRaw.length);
+      if (getValues('visaMaster')) {
+        if (joinedRaw.length > 15) {
+          console.log('catching length', joinedRaw.length);
 
-        return value.slice(0, 17);
+          return value.slice(0, 17);
+        }
+
+        return insertSeparatorEveryNChars(joinedRaw, 5, ' ');
+      }
+      if (joinedRaw.length > 16) {
+        return value.slice(0, 19);
       }
 
-      return insertSeparatorEveryNChars(cleanedValue, 5, ' ');
-    }
-    if (joinedRaw.length > 16) {
-      return value.slice(0, 19);
+      return insertSeparatorEveryNChars(joinedRaw, 4, ' ');
     }
 
-    return insertSeparatorEveryNChars(cleanedValue, 4, ' ');
+    return value.slice(0, value.length - 1);
   }
   if (name === 'expiryDate') {
     const cleanedValue = value.replace(/\D/g, '');
@@ -52,16 +55,15 @@ function isCardNumber(
   }
 
   if (name === 'cvv') {
-    const cleanedValue = value.replace(
-      /^(?:[a-zA-Z]+\s?|[a-zA-Z]+\s[a-zA-Z]*)$/,
-      ''
-    );
+    if (/^[0-9]+$/.test(value)) {
+      if (getValues('visaMaster')) {
+        return value.slice(0, 4);
+      }
 
-    if (getValues('visaMaster')) {
-      return cleanedValue.slice(0, 4);
+      return value.slice(0, 3);
     }
 
-    return cleanedValue.slice(0, 3);
+    return value.slice(0, value.length - 1);
   }
 }
 
