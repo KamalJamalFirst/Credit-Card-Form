@@ -1,5 +1,5 @@
 import CreditCard from './shared/components/credit-card-form';
-import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useForm, type Resolver, type SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import type { FormInputs, sendSubmit } from './shared/types/inputs';
 import { paySchemaDefault } from './shared/schema/paySchema';
@@ -27,7 +27,7 @@ export const App = () => {
   } = useForm<FormInputs>({
     mode: 'onChange',
     defaultValues: fieldsNames,
-    resolver: yupResolver(paySchemaDefault)
+    resolver: yupResolver(paySchemaDefault) as unknown as Resolver<T>
   });
 
   const onSubmit: SubmitHandler<FormInputs> = data => {
