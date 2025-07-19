@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import Card from '@mui/joy/Card';
 import CardActions from '@mui/joy/CardActions';
 import CardContent from '@mui/joy/CardContent';
@@ -11,27 +10,46 @@ import Button from '@mui/joy/Button';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import type { FormInputs } from '../types/inputs';
 import SelectCard from './buttonGroup';
-import { Controller, type Control, type FieldErrors, type UseFormGetValues, type UseFormRegister, type UseFormReset, type UseFormResetField, type UseFormSetValue, type UseFormTrigger } from 'react-hook-form';
-import type { AssertsShape } from 'yup/lib/object';
+import {
+  Controller,
+  type Control,
+  type FieldErrors,
+  type UseFormGetValues,
+  type UseFormReset
+} from 'react-hook-form';
 import InputController from './controller';
 import isCardNumber from '../helpers/isCardNumber';
+import type { BooleanSchema } from 'yup';
+import type { AssertsShape } from 'yup/lib/object';
+import type { RequiredStringSchema } from 'yup/lib/string';
+import type { AnyObject } from 'yup/lib/types';
 
-export default function CreditCard({ reset, trigger, control, setValue, getValues, errors, placeholder, fieldsNames, isValid }: { 
-    register: UseFormRegister<FormInputs>, 
-    reset: UseFormReset<FormInputs>,
-    resetFeild: UseFormResetField<AssertsShape>
-    trigger: UseFormTrigger<AssertsShape>,
-    setValue: UseFormSetValue<AssertsShape>,
-    getValues: UseFormGetValues<FormInputs>,
-    errors: FieldErrors<FormInputs>, 
-    control:  Control<FormInputs>,
-    placeholder: string,
-    fieldsNames: FormInputs,
-    isValid: boolean
-}) 
-  {
-
-return (
+export default function CreditCard({
+  reset,
+  control,
+  getValues,
+  errors,
+  placeholder,
+  fieldsNames,
+  isValid
+}: {
+  reset: UseFormReset<FormInputs>;
+  control: Control<
+    AssertsShape<{
+      visaMaster: BooleanSchema<boolean, AnyObject, boolean>;
+      cardNumber: RequiredStringSchema<string | undefined, AnyObject>;
+      expiryDate: RequiredStringSchema<string | undefined, AnyObject>;
+      holderName: RequiredStringSchema<string | undefined, AnyObject>;
+      cvv: RequiredStringSchema<string | undefined, AnyObject>;
+    }>
+  >;
+  getValues: UseFormGetValues<FormInputs>;
+  errors: FieldErrors<FormInputs>;
+  placeholder: string;
+  fieldsNames: FormInputs;
+  isValid: boolean;
+}) {
+  return (
     <Card
       variant="outlined"
       sx={{
@@ -42,12 +60,12 @@ return (
         overflow: 'auto',
         resize: 'horizontal'
       }}
-    >   
-      <div className='flex justify-between'>
+    >
+      <div className="flex justify-between">
         <Typography level="title-lg" startDecorator={<InfoOutlined />}>
-            Add payment method
+          Add payment method
         </Typography>
-        <SelectCard control={control} reset={reset} fieldsNames={fieldsNames}/>
+        <SelectCard control={control} reset={reset} fieldsNames={fieldsNames} />
       </div>
       <Divider inset="none" />
       <CardContent
@@ -59,98 +77,88 @@ return (
       >
         <FormControl required={true} sx={{ gridColumn: '1/-1' }}>
           <FormLabel>Card number</FormLabel>
-          <Controller 
+          <Controller
             control={control}
-            name='cardNumber'
+            name="cardNumber"
             render={({ field: { onChange, value } }) => {
               const prettyValue = isCardNumber(value, 'cardNumber', getValues);
-              
+
               return (
-                <InputController 
-                        onChange={onChange} 
-                        value={prettyValue} 
-                        name='cardNumber' 
-                        placeholder={placeholder} 
-                        errors={errors} 
-                        trigger={trigger} 
-                        setValue={setValue} 
-                        getValues={getValues}
-                  />
-              )
+                <InputController
+                  onChange={onChange}
+                  value={prettyValue}
+                  name="cardNumber"
+                  placeholder={placeholder}
+                  errors={errors}
+                />
+              );
             }}
           />
         </FormControl>
         <FormControl required={true}>
           <FormLabel>Expiry date</FormLabel>
-          <Controller 
+          <Controller
             control={control}
-            name='expiryDate'
+            name="expiryDate"
             render={({ field: { onChange, value } }) => {
-                const prettyValue = isCardNumber(value, 'expiryDate', getValues);
-                
-                return (
-                  <InputController 
-                          onChange={onChange} 
-                          value={prettyValue} 
-                          name='expiryDate' 
-                          placeholder={'MM / YY'} 
-                          errors={errors} 
-                          trigger={trigger} 
-                          setValue={setValue} 
-                          getValues={getValues}
-                    />
-                )
+              const prettyValue = isCardNumber(value, 'expiryDate', getValues);
+
+              return (
+                <InputController
+                  onChange={onChange}
+                  value={prettyValue}
+                  name="expiryDate"
+                  placeholder={'MM / YY'}
+                  errors={errors}
+                />
+              );
             }}
           />
         </FormControl>
         <FormControl required={true}>
           <FormLabel>CVC/CVV</FormLabel>
-          <Controller 
+          <Controller
             control={control}
-            name='cvv'
+            name="cvv"
             render={({ field: { onChange, value } }) => {
-                const prettyValue = isCardNumber(value, 'cvv', getValues);
-                
-                return (
-                  <InputController 
-                          onChange={onChange} 
-                          value={prettyValue} 
-                          name='cvv' 
-                          placeholder={'CVC/CVV'} 
-                          errors={errors} 
-                          trigger={trigger} 
-                          setValue={setValue} 
-                          getValues={getValues}
-                    />
-                )
+              const prettyValue = isCardNumber(value, 'cvv', getValues);
+
+              return (
+                <InputController
+                  onChange={onChange}
+                  value={prettyValue}
+                  name="cvv"
+                  placeholder={'CVC/CVV'}
+                  errors={errors}
+                />
+              );
             }}
           />
         </FormControl>
         <FormControl required={true} sx={{ gridColumn: '1/-1' }}>
           <FormLabel>Card holder name</FormLabel>
-          <Controller 
+          <Controller
             control={control}
-            name='holderName'
-            render={({ field: { onChange, value } }) => 
-                
-                 (
-                  <InputController 
-                          onChange={onChange} 
-                          value={value} 
-                          name='holderName' 
-                          placeholder={"Enter cardholder's full name"} 
-                          errors={errors} 
-                          trigger={trigger} 
-                          setValue={setValue} 
-                          getValues={getValues}
-                    />
-                )
-            }
+            name="holderName"
+            render={({ field: { onChange, value } }) => (
+              <InputController
+                onChange={onChange}
+                value={value}
+                name="holderName"
+                placeholder={"Enter cardholder's full name"}
+                errors={errors}
+              />
+            )}
           />
         </FormControl>
         <Checkbox label="Save card" sx={{ gridColumn: '1/-1', my: 1 }} />
         <CardActions sx={{ gridColumn: '1/-1' }}>
-          <Button type='submit' disabled={isValid ? false : true} variant="solid" color="primary">
+          <Button
+            type="submit"
+            disabled={isValid ? false : true}
+            variant="solid"
+            color="primary"
+          >
             Pay
           </Button>
         </CardActions>

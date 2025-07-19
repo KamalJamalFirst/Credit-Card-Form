@@ -7,7 +7,6 @@ function isCardNumber(
   getValues: UseFormGetValues<FormInputs>
   //setValue: UseFormSetValue<AssertsShape>
 ) {
-  const regexText = /^(?:[a-zA-Z]+\s?|[a-zA-Z]+\s[a-zA-Z]*)$/;
   const regexNum = /^[0-9\s]+$/;
   //   console.log(name);
   //   console.log(value);

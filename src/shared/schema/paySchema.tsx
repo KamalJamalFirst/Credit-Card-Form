@@ -101,15 +101,3 @@ export const paySchemaDefault = yup.object({
     })
     .required('CVV is required')
 });
-
-// function isNumbers() {
-//   return this.matches(/^[0-9]+$/, {
-//     message: 'Only numbers acceptable',
-//     excludeEmptyStrings: true
-//   });
-// }
-
-// yup.addMethod(yup.string, 'isNumbers', isNumbers);
-// const paySchemaDefault = yup.object.shape(
-
-// )

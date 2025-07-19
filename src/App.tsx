@@ -20,9 +20,7 @@ export const App = () => {
 
   const {
     reset,
-    trigger,
     control,
-    setValue,
     getValues,
     handleSubmit,
     formState: { errors, isValid }
@@ -33,12 +31,14 @@ export const App = () => {
   });
 
   const onSubmit: SubmitHandler<FormInputs> = data => {
-    const sendSubmit: sendSubmit = {};
-    sendSubmit['cardNumber'] = data.cardNumber.replaceAll(' ', '');
-    sendSubmit['expiryMonth'] = data.expiryDate.split('/')[0];
-    sendSubmit['expiryYear'] = '20' + data.expiryDate.split('/')[1];
-    sendSubmit['holderName'] = data.holderName;
-    sendSubmit['cvv'] = data.cvv;
+    const sendSubmit: sendSubmit = {
+      cardNumber: data.cardNumber.replaceAll(' ', ''),
+      expiryMonth: data.expiryDate.split('/')[0],
+      expiryYear: '20' + data.expiryDate.split('/')[1],
+      holderName: data.holderName,
+      cvv: data.cvv
+    };
+
     console.log(sendSubmit);
   };
 
@@ -49,13 +49,9 @@ export const App = () => {
     >
       <CreditCard
         reset={reset}
-        trigger={trigger}
-        //unregister={unregister}
         control={control}
-        setValue={setValue}
         getValues={getValues}
         errors={errors}
-        //handleSubmit={handleSubmit}
         placeholder={
           getValues('visaMaster') ? placeholderAmex : placeholderDefault
         }
