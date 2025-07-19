@@ -10,7 +10,7 @@ export const App = () => {
     '55555 55555 55555'
   ];
 
-  const fieldsNames: FormInputs = {
+  const fieldsNames = {
     cardNumber: '',
     expiryDate: '',
     holderName: '',

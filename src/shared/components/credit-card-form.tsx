@@ -19,10 +19,6 @@ import {
 } from 'react-hook-form';
 import InputController from './controller';
 import isCardNumber from '../helpers/isCardNumber';
-import type { BooleanSchema } from 'yup';
-import type { AssertsShape } from 'yup/lib/object';
-import type { RequiredStringSchema } from 'yup/lib/string';
-import type { AnyObject } from 'yup/lib/types';
 
 export default function CreditCard({
   reset,
@@ -34,15 +30,7 @@ export default function CreditCard({
   isValid
 }: {
   reset: UseFormReset<FormInputs>;
-  control: Control<
-    AssertsShape<{
-      visaMaster: BooleanSchema<boolean, AnyObject, boolean>;
-      cardNumber: RequiredStringSchema<string | undefined, AnyObject>;
-      expiryDate: RequiredStringSchema<string | undefined, AnyObject>;
-      holderName: RequiredStringSchema<string | undefined, AnyObject>;
-      cvv: RequiredStringSchema<string | undefined, AnyObject>;
-    }>
-  >;
+  control: Control<FormInputs>;
   getValues: UseFormGetValues<FormInputs>;
   errors: FieldErrors<FormInputs>;
   placeholder: string;
