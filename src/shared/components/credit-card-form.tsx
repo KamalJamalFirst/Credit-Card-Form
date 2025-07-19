@@ -74,14 +74,38 @@ return (
             control={control}
             name='cardNumber'
             render={({ field: { onChange, value } }) => {
-                const prettyValue = errors['cardNumber']?.type === 'min' ? isCardNumber(value, 'cardNumber', getValues) : value;
+              const prettyValue = isCardNumber(value, 'cardNumber', getValues);
+              //const prettyValue = errors['cardNumber']?.type === 'min' ? isCardNumber(value, 'cardNumber', getValues) : value;
+              
+              return (
+                <InputController 
+                        onChange={onChange} 
+                        value={prettyValue} 
+                        name='cardNumber' 
+                        placeholder={placeholder} 
+                        errors={errors} 
+                        trigger={trigger} 
+                        setValue={setValue} 
+                        getValues={getValues}
+                  />
+              )
+            }}
+          />
+        </FormControl>
+        <FormControl required={true}>
+          <FormLabel>Expiry date</FormLabel>
+          <Controller 
+            control={control}
+            name='expiryDate'
+            render={({ field: { onChange, value } }) => {
+                const prettyValue = isCardNumber(value, 'expiryDate', getValues);
                 
                 return (
                   <InputController 
                           onChange={onChange} 
                           value={prettyValue} 
-                          name='cardNumber' 
-                          placeholder={placeholder} 
+                          name='expiryDate' 
+                          placeholder={'MM / YY'} 
                           errors={errors} 
                           trigger={trigger} 
                           setValue={setValue} 
@@ -92,23 +116,26 @@ return (
           />
         </FormControl>
         <FormControl required={true}>
-          <FormLabel>Expiry date</FormLabel>
-          <Controller 
-            control={control}
-            name='expiryDate'
-            render={({ field: { onChange, value } }) => (
-              <InputController onChange={onChange} value={value} name='expiryDate' placeholder='MM / YY' errors={errors} trigger={trigger} getValues={getValues}/>
-            )}
-          />
-        </FormControl>
-        <FormControl required={true}>
           <FormLabel>CVC/CVV</FormLabel>
           <Controller 
             control={control}
             name='cvv'
-            render={({ field: { onChange, value } }) => (
-              <InputController onChange={onChange} value={value} name='cvv' placeholder='CVC/CVV' errors={errors} trigger={trigger} getValues={getValues}/>
-            )}
+            render={({ field: { onChange, value } }) => {
+                const prettyValue = isCardNumber(value, 'cvv', getValues);
+                
+                return (
+                  <InputController 
+                          onChange={onChange} 
+                          value={prettyValue} 
+                          name='cvv' 
+                          placeholder={'CVC/CVV'} 
+                          errors={errors} 
+                          trigger={trigger} 
+                          setValue={setValue} 
+                          getValues={getValues}
+                    />
+                )
+            }}
           />
         </FormControl>
         <FormControl required={true} sx={{ gridColumn: '1/-1' }}>
@@ -116,9 +143,22 @@ return (
           <Controller 
             control={control}
             name='holderName'
-            render={({ field: { onChange, value } }) => (
-              <InputController onChange={onChange} value={value} name='holderName' placeholder="Enter cardholder's full name" errors={errors} trigger={trigger} />
-            )}
+            render={({ field: { onChange, value } }) => {
+                //const prettyValue = isCardNumber(value, 'cvv', getValues);
+                
+                return (
+                  <InputController 
+                          onChange={onChange} 
+                          value={value} 
+                          name='holderName' 
+                          placeholder={"Enter cardholder's full name"} 
+                          errors={errors} 
+                          trigger={trigger} 
+                          setValue={setValue} 
+                          getValues={getValues}
+                    />
+                )
+            }}
           />
         </FormControl>
         <Checkbox label="Save card" sx={{ gridColumn: '1/-1', my: 1 }} />
