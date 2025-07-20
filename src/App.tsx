@@ -27,7 +27,7 @@ export const App = () => {
   } = useForm<FormInputs>({
     mode: 'onChange',
     defaultValues: fieldsNames,
-    resolver: yupResolver(paySchemaDefault) as unknown as Resolver<T>
+    resolver: yupResolver(paySchemaDefault) as unknown as Resolver<FormInputs>
   });
 
   const onSubmit: SubmitHandler<FormInputs> = data => {
