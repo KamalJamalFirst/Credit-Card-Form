@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "@mui/material": ["./node_modules/@mui/joy"],
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2023",
     "lib": ["ES2023"],
@@ -15,11 +16,16 @@
 
     /* Linting */
     "strict": true,
+    // "strictFunctionTypes": false,
+    // "strictNullChecks": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "paths": {
+      "@mui/material": ["./node_modules/@mui/joy"]
+    }
   },
   "include": ["vite.config.ts"]
 }
